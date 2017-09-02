@@ -1,0 +1,13 @@
+<form
+  class="form"
+  [formGroup]="searchForm"
+  (ngSubmit)="onSubmit($event)"
+  novalidate>
+
+  <input
+    class="form__input"
+    placeholder="Username..."
+    formControlName="q"/>
+
+  <button class="form__button">Search</button>
+</form>

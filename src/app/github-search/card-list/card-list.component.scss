@@ -1,0 +1,14 @@
+.list {
+  &__loader {
+    // TODO:
+    position: absolute;
+    top: 130px;
+    left: 0;
+    right: 0;
+  }
+  &__items {
+    &_loading {
+      opacity: 0.2;
+    }
+  }
+}

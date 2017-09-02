@@ -1,0 +1,15 @@
+.pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+  &__button {
+    font-size: 1rem;
+    border: 1px solid black;
+    background: darken(white, 10%);
+    padding: 0.5rem 2rem;
+  }
+  &__pages {
+
+  }
+}

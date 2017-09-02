@@ -1,0 +1,12 @@
+<div class="list">
+  <div class="list__loader">
+    <div class="loader" *ngIf="loading">
+      <svg class="circular" viewBox="25 25 50 50">
+        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"></circle>
+      </svg>
+    </div>
+  </div>
+  <div class="list__items" [ngClass]="loading ? 'list__items_loading' : ''">
+    <app-card *ngFor="let user of users | async" [user]="user"></app-card>
+  </div>
+</div>

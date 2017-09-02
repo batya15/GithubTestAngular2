@@ -1,0 +1,19 @@
+.form {
+  display: flex;
+  margin-bottom: 0.5rem;
+  &__button {
+    font-size: 1rem;
+    border: 1px solid black;
+    padding: 0.5rem 2rem;
+    background: darken(white, 10%);
+  }
+  &__input {
+    flex-grow: 1;
+    font-size: 1rem;
+    border: 1px solid black;
+    padding: 0.5rem;
+    margin-right: 0.5rem;
+  }
+}
+
+
