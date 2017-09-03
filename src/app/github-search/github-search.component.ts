@@ -5,9 +5,10 @@ import { Subject } from 'rxjs/Subject';
 import 'rxjs/add/operator/do';
 import 'rxjs/add/operator/map';
 
-import { IUser } from './interfaces/iuser';
-import { IGithubUser } from './interfaces/igithub-user';
-import { SearchResult } from './interfaces/search-result';
+import { IUser } from './models/iuser';
+import { IGithubUser } from './models/igithub-user';
+import { SearchResult } from './models/search-result';
+import 'rxjs/add/operator/catch';
 
 function toIUser(user: IGithubUser): IUser {
   return {

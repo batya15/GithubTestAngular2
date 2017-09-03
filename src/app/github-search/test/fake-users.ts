@@ -1,4 +1,4 @@
-import { IUser } from '../../interfaces/iuser';
+import { IUser } from '../models/iuser';
 
 export const FAKE_USER1: IUser = {
   login: 'mojombo',
