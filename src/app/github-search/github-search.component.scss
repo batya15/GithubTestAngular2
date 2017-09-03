@@ -1,8 +1,9 @@
 .gh-search {
   width: 400px;
   margin: 0 auto;
+  overflow: hidden;
   &__list {
     height: calc(400px + 2rem);
-    overflow: scroll;
+    overflow-y: scroll;
   }
 }
