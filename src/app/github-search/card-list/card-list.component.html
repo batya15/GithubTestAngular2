@@ -7,7 +7,7 @@
     </div>
   </div>
   <div class="list__items" *ngIf="!hasError()" [ngClass]="loading ? 'list__items_loading' : ''">
-    <app-card *ngFor="let user of users | async" [user]="user"></app-card>
+    <app-card *ngFor="let user of users" [user]="user"></app-card>
     <div *ngIf="isEmpty()">Nothing found</div>
   </div>
   <div class="list__error" *ngIf="hasError()">{{ error }}</div>

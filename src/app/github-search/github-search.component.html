@@ -1,7 +1,7 @@
 <div class="gh-search">
   <app-search-form (submit)="onChangeForm($event)"></app-search-form>
   <div class="gh-search__list">
-    <app-card-list [users]="users" [loading]="loading"></app-card-list>
+    <app-card-list [users]="users | async" [loading]="loading"></app-card-list>
   </div>
   <app-pagination [totalItems]="totalItems" [perPage]="perPage" [current]="currentPage" (pageChange)="onPageChange($event)"></app-pagination>
 </div>
