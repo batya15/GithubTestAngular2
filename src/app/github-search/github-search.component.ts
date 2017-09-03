@@ -42,10 +42,6 @@ export class GithubSearchComponent {
     this.get(q).subscribe(
       users => {
         this.users.next(users);
-      },
-      error => {
-        this.users.next([]);
-        this.errorMsg = <any>error;
       });
   }
 
