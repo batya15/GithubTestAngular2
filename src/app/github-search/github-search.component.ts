@@ -29,6 +29,7 @@ export class GithubSearchComponent {
   users = new Subject<IUser[]>();
 
   loading = false;
+  errorMsg: string;
 
   perPage = 10;
   totalItems = 0;
@@ -39,9 +40,14 @@ export class GithubSearchComponent {
   onChangeForm(q: string) {
     if (q === '') return;
     this.search = q;
-    this.get(q).subscribe(users => {
-      this.users.next(users);
-    });
+    this.get(q).subscribe(
+      users => {
+        this.users.next(users);
+      },
+      error => {
+        this.users.next([]);
+        this.errorMsg = <any>error;
+      });
   }
 
   onPageChange(page: number) {
@@ -59,9 +65,17 @@ export class GithubSearchComponent {
     this.loading = true;
     return this.http
       .get<SearchResult>(url, options)
-      .do(searchRes => this.totalItems = searchRes.total_count)
-      .do(searchRes => this.currentPage = page)
-      .do(searchRes => this.loading = false)
-      .map(searchRes => searchRes.items.map(toIUser));
+      .do(searchRes => {
+        this.totalItems = searchRes.total_count;
+        this.currentPage = page;
+        this.loading = false;
+        this.errorMsg = '';
+      })
+      .map(searchRes => searchRes.items.map(toIUser))
+      .catch(e => {
+        this.loading = false;
+        this.errorMsg = 'API is not available';
+        throw new Error(this.errorMsg);
+      });
   }
 }
