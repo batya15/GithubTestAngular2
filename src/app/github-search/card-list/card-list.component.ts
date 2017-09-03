@@ -11,7 +11,11 @@ export class CardListComponent {
   @Input() users: IUser[];
   @Input() error: string;
 
-  hasError() {
+  hasError(): boolean {
     return Boolean(this.error);
+  }
+
+  isEmpty(): boolean {
+    return Boolean(this.users && !this.users.length);
   }
 }
