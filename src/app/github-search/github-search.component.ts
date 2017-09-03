@@ -18,7 +18,6 @@ function toIUser(user: IGithubUser): IUser {
   };
 }
 
-// TODO: yourmom
 @Component({
   selector: 'app-github-search',
   templateUrl: './github-search.component.html',
