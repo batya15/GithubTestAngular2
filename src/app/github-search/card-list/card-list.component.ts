@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { IUser } from '../models/iuser';
 
 @Component({
   selector: 'app-card-list',
   templateUrl: './card-list.component.html',
-  styleUrls: ['./card-list.component.scss']
+  styleUrls: ['./card-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CardListComponent {
   @Input() loading: boolean;

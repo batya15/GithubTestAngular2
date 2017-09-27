@@ -9,6 +9,7 @@ import { CardListComponent } from './card-list/card-list.component';
 import { SearchFormComponent } from './search-form/search-form.component';
 import { GithubSearchComponent } from './github-search.component';
 import { CardComponent } from './card-list/card/card.component';
+import { GithubSearchService } from './github-search.service';
 
 @NgModule({
   imports: [
@@ -22,6 +23,9 @@ import { CardComponent } from './card-list/card/card.component';
     SearchFormComponent,
     CardListComponent,
     CardComponent,
+  ],
+  providers: [
+    GithubSearchService,
   ],
   exports: [
     GithubSearchComponent,

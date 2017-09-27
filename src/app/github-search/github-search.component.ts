@@ -9,14 +9,9 @@ import { IUser } from './models/iuser';
 import { IGithubUser } from './models/igithub-user';
 import { SearchResult } from './models/search-result';
 import 'rxjs/add/operator/catch';
-
-function toIUser(user: IGithubUser): IUser {
-  return {
-    login: user.login,
-    url: user.html_url,
-    avatar: user.avatar_url,
-  };
-}
+import { AppState } from '../app.module';
+import { Store } from '@ngrx/store';
+import { GithubSearchService } from './github-search.service';
 
 @Component({
   selector: 'app-github-search',
@@ -25,52 +20,35 @@ function toIUser(user: IGithubUser): IUser {
 })
 export class GithubSearchComponent {
   search: string;
-  users = new Subject<IUser[]>();
-
+  users: Observable<IUser[]>;
   loading = false;
   errorMsg: string;
 
-  perPage = 10;
-  totalItems = 0;
-  currentPage = 1;
 
-  constructor(private http: HttpClient) { }
-
-  onChangeForm(q: string) {
-    if (q === '') return;
-    this.search = q;
-    this.get(q).subscribe(
-      users => {
-        this.users.next(users);
-      });
+  constructor(private service: GithubSearchService, private store: Store<AppState>) {
+    this.users = store.select('users');
   }
 
-  onPageChange(page: number) {
-    this.get(this.search, page).subscribe(users => {
-      this.users.next(users);
-    });
-  }
-
-  get(q: string, page: number = 1): Observable<IUser[]> {
-    // return Observable.of(FAKE_USERS.sort(() => .5 - Math.random()));
-    const url = `https://api.github.com/search/users`;
-    const options = {
-      params: new HttpParams().set('q', q).set('per_page', '10').set('page', String(page)),
-    };
-    this.loading = true;
-    return this.http
-      .get<SearchResult>(url, options)
-      .do(searchRes => {
-        this.totalItems = searchRes.total_count;
-        this.currentPage = page;
-        this.loading = false;
-        this.errorMsg = '';
-      })
-      .map(searchRes => searchRes.items.map(toIUser))
-      .catch(e => {
-        this.loading = false;
-        this.errorMsg = 'API is not available';
-        throw new Error(this.errorMsg);
-      });
-  }
+  // getFromServer(q: string, page: number = 1): Observable<IUser[]> {
+  //   // return Observable.of(FAKE_USERS.sort(() => .5 - Math.random()));
+  //   const url = `https://api.github.com/search/users`;
+  //   const options = {
+  //     params: new HttpParams().set('q', q).set('per_page', '10').set('page', String(page)),
+  //   };
+  //   this.loading = true;
+  //   return this.http
+  //     .getFromServer<SearchResult>(url, options)
+  //     .do(searchRes => {
+  //       this.totalItems = searchRes.total_count;
+  //       this.currentPage = page;
+  //       this.errorMsg = '';
+  //     })
+  //     .map(searchRes => searchRes.items.map(toIUser))
+  //     .catch(e => {
+  //       this.errorMsg = 'API is not available';
+  //       console.error(e);
+  //       return [];
+  //     })
+  //     .do(_ => this.loading = false);
+  // }
 }

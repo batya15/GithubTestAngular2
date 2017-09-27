@@ -6,7 +6,7 @@
       </svg>
     </div>
   </div>
-  <div class="list__items" *ngIf="!hasError()" [ngClass]="loading ? 'list__items_loading' : ''">
+  <div class="list__items" *ngIf="!hasError()" [ngClass]="{ 'list__items_loading': loading }">
     <app-card *ngFor="let user of users" [user]="user"></app-card>
     <div *ngIf="isEmpty()">Nothing found</div>
   </div>
