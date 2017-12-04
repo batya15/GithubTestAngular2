@@ -1,27 +1,19 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, Output, EventEmitter } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-search-form',
   templateUrl: './search-form.component.html',
   styleUrls: ['./search-form.component.scss']
 })
-export class SearchFormComponent implements OnInit {
-  searchForm: FormGroup;
+export class SearchFormComponent {
   @Output() submit: EventEmitter<string> = new EventEmitter();
+  searchForm: FormGroup = new FormGroup({
+    q: new FormControl(''),
+  });
 
-  constructor(private fb: FormBuilder) {}
-
-  ngOnInit() {
-    this.searchForm = this.fb.group({
-      q: '',
-    });
-  }
-
-  onSubmit(event: any) {
-    // TODO:
+  onSubmit(event: Event) {
     event.stopPropagation();
     this.submit.emit(this.searchForm.value.q);
   }
-
 }

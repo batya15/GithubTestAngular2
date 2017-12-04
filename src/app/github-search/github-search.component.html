@@ -1,7 +1,16 @@
-<div class="gh-search">
+<div class="gh-search" *ngIf="model$ | async as model">
   <app-search-form (submit)="onChangeForm($event)"></app-search-form>
-  <div class="gh-search__list">
-    <app-card-list [users]="users | async" [loading]="loading" [error]="errorMsg"></app-card-list>
+  <div class="gh-search__list" *ngIf="model.isStateLoaded()">
+    <app-card *ngFor="let user of model.users" [user]="user"></app-card>
   </div>
-  <app-pagination [totalItems]="totalItems" [perPage]="perPage" [current]="currentPage" (pageChange)="onPageChange($event)"></app-pagination>
+  <div class="gh-search__list gh-search__list_centered" *ngIf="model.isStatePending()">
+    <div class="loader">
+      <svg class="circular" viewBox="25 25 50 50">
+        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="2" stroke-miterlimit="10"></circle>
+      </svg>
+    </div>
+  </div>
+  <div class="gh-search__list gh-search__list_centered" *ngIf="model.isStateNone()">Search someone</div>
+  <div class="gh-search__list gh-search__list_centered gh-search__list_red" *ngIf="model.isStateError()">{{ model.errorMessage }}</div>
+  <app-pagination [totalItems]="model.totalCount" [perPage]="10" [current]="model.page" (pageChange)="onPageChange($event)"></app-pagination>
 </div>

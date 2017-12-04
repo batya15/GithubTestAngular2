@@ -4,6 +4,14 @@
   overflow: hidden;
   &__list {
     height: calc(400px + 2rem);
-    overflow-y: scroll;
+    overflow-y: auto;
+    &_centered {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    &_red {
+      color: red;
+    }
   }
 }

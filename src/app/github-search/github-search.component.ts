@@ -2,21 +2,17 @@ import { Component } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-
-import { IUser } from './models/iuser';
-import { IGithubUser } from './models/igithub-user';
 import { SearchResult } from './models/search-result';
-import 'rxjs/add/operator/catch';
+import { GithubSearchModel } from './github-search.model';
+import { responseWithState } from '../common/response-with-state';
 
-function toIUser(user: IGithubUser): IUser {
-  return {
-    login: user.login,
-    url: user.html_url,
-    avatar: user.avatar_url,
-  };
-}
+import 'rxjs/add/operator/takeWhile';
+import 'rxjs/add/operator/filter';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/let';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/switchMap';
+
 
 @Component({
   selector: 'app-github-search',
@@ -24,53 +20,40 @@ function toIUser(user: IGithubUser): IUser {
   styleUrls: ['./github-search.component.scss']
 })
 export class GithubSearchComponent {
-  search: string;
-  users = new Subject<IUser[]>();
+  model$: Observable<GithubSearchModel>;
+  changeForm$: Subject<string> = new Subject<string>();
+  changePage$: Subject<number> = new Subject<number>();
 
-  loading = false;
-  errorMsg: string;
-
-  perPage = 10;
-  totalItems = 0;
-  currentPage = 1;
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.model$ = this.changeForm$
+      .filter(q => q !== '')
+      .switchMap(q => this.changePage$
+        .startWith(1)
+        .switchMap(page => this.getUsers(q, page)
+          .let(responseWithState)
+          .map(searchRes => new GithubSearchModel(searchRes, q, page))
+        )
+      )
+      .startWith(new GithubSearchModel());
+  }
 
   onChangeForm(q: string) {
-    if (q === '') return;
-    this.search = q;
-    this.get(q).subscribe(
-      users => {
-        this.users.next(users);
-      });
+    this.changeForm$.next(q);
   }
 
   onPageChange(page: number) {
-    this.get(this.search, page).subscribe(users => {
-      this.users.next(users);
-    });
+    this.changePage$.next(page);
   }
 
-  get(q: string, page: number = 1): Observable<IUser[]> {
-    // return Observable.of(FAKE_USERS.sort(() => .5 - Math.random()));
+  getUsers(q: string = '', page: number = 1): Observable<SearchResult> {
     const url = `https://api.github.com/search/users`;
-    const options = {
-      params: new HttpParams().set('q', q).set('per_page', '10').set('page', String(page)),
-    };
-    this.loading = true;
     return this.http
-      .get<SearchResult>(url, options)
-      .do(searchRes => {
-        this.totalItems = searchRes.total_count;
-        this.currentPage = page;
-        this.loading = false;
-        this.errorMsg = '';
+      .get<SearchResult>(url, {
+        params: new HttpParams()
+          .set('q', q)
+          .set('per_page', '10')
+          .set('page', String(page)),
       })
-      .map(searchRes => searchRes.items.map(toIUser))
-      .catch(e => {
-        this.loading = false;
-        this.errorMsg = 'API is not available';
-        throw new Error(this.errorMsg);
-      });
+      .takeWhile(() => q !== '');
   }
 }

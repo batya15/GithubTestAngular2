@@ -41,7 +41,6 @@ export class PaginationComponent {
       const target: any = event.target;
       target.blur();
     }
-    this.current = value;
     this.pageChange.emit(value);
   }
 }
