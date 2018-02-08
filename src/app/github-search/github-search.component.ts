@@ -12,6 +12,8 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/let';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/switchMap';
+import 'rxjs/add/operator/scan';
+import {EModelState} from '../common/with-state';
 
 
 @Component({
@@ -31,9 +33,10 @@ export class GithubSearchComponent {
         .startWith(1)
         .switchMap(page => this.getUsers(q, page)
           .let(responseWithState)
-          .map(searchRes => new GithubSearchModel(searchRes, q, page))
         )
       )
+      .scan((acc, searchRes) => searchRes.state === EModelState.PENDING && acc.data ? {state: searchRes.state, data: acc.data} : searchRes)
+      .map(searchRes => new GithubSearchModel(searchRes))
       .startWith(new GithubSearchModel());
   }
 
@@ -54,6 +57,7 @@ export class GithubSearchComponent {
           .set('per_page', '10')
           .set('page', String(page)),
       })
+      .map(searchRes => Object.assign(searchRes, {page}))
       .takeWhile(() => q !== '');
   }
 }

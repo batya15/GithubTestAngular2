@@ -17,15 +17,15 @@ export class GithubSearchModel extends WithStateModel {
   readonly users: IUser[] = [];
   readonly totalCount: number = 0;
   readonly errorMessage: string = '';
+  readonly page: number = 1;
 
   constructor(
     searchResult: IResponseWithState<SearchResult> = {data: null, state: EModelState.NONE},
-    public readonly q: string = '',
-    public readonly page: number = 1,
   ) {
     super(searchResult.state);
-    const { items = [], total_count = 0 } = {...searchResult.data};
+    const { items = [], total_count = 0, page = 1 } = {...searchResult.data};
 
+    this.page = page;
     this.users = items.map(toIUser);
     this.totalCount = total_count;
     if (this.isStateError()) {
