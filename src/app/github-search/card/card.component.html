@@ -1,7 +1,7 @@
 <div class="card">
-  <img class="card__avatar" [src]="user.avatar" alt="Avatar">
+  <img class="card__avatar" [src]="user.avatar" alt="Avatar" *ngIf="avatarRender">
   <div class="card__title">
     <h2 class="card__title_main card__title_overflow">{{ user.login }}</h2>
-    <a class="card__title_sub card__title_overflow" [href]="user.url">{{ user.url }}</a>
+    <a class="card__title_sub card__title_overflow" [href]="user.url" *ngIf="linkRender">{{ user.url }}</a>
   </div>
 </div>

@@ -8,4 +8,8 @@ import { IUser } from '../models/iuser';
 })
 export class CardComponent {
   @Input() user: IUser;
+
+  @Input() avatarRender = true;
+
+  @Input() linkRender = true;
 }

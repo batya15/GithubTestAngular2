@@ -1,5 +1,5 @@
 <div class="pagination">
   <button class="pagination__button" [disabled]="isFirstPage()" (click)="selectPage(current - 1, $event)"><<</button>
-  <div class="pagination__pages">{{ current }}/{{ pages }}</div>
+  <div class="pagination__pages">{{ current + 1 }}/{{ pages }}</div>
   <button class="pagination__button" [disabled]="isLastPage()" (click)="selectPage(current + 1, $event)">>></button>
 </div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -26,7 +26,7 @@ export class GithubSearchComponent {
   changeForm$: Subject<string> = new Subject<string>();
   changePage$: Subject<number> = new Subject<number>();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private chRef: ChangeDetectorRef) {
     this.model$ = this.changeForm$
       .filter(q => q !== '')
       .switchMap(q => this.changePage$
@@ -53,11 +53,15 @@ export class GithubSearchComponent {
     return this.http
       .get<SearchResult>(url, {
         params: new HttpParams()
-          .set('q', q)
+          .set('q', q ? q.slice(0, -1) : q)
           .set('per_page', '10')
           .set('page', String(page)),
       })
       .map(searchRes => Object.assign(searchRes, {page}))
       .takeWhile(() => q !== '');
+  }
+
+  change() {
+    this.chRef.markForCheck();
   }
 }

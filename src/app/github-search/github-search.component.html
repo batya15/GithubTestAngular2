@@ -1,7 +1,13 @@
 <div class="gh-search" *ngIf="model$ | async as model">
   <app-search-form (submit)="onChangeForm($event)"></app-search-form>
+  <div>
+    <input #avatar (change)="change()"  type="checkbox" checked value="avatar"> Аватарка
+  </div>
+  <div>
+    <input #link (change)="change()" type="checkbox" checked value="link"> Ссылка на профиль
+  </div>
   <div class="gh-search__list" *ngIf="model.isStateLoaded()">
-    <app-card *ngFor="let user of model.users" [user]="user"></app-card>
+    <app-card [avatarRender]="avatar.checked" *ngFor="let user of model.users" [user]="user"></app-card>
   </div>
   <div class="gh-search__list gh-search__list_centered" *ngIf="model.isStatePending()">
     <div class="loader">
